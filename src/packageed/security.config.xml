@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user name="zel" authorities="admin"
+					password="zel" />
+				<security:user name="fikre" authorities="user"
+					password="fikre" />
+			</security:user-service>
+		</security:authentication-provider>
+		<security:authentication-provider>
+			<security:jdbc-user-service data-source-ref="datasource" />
+			<security:password-encoder ref="passwordEncoder"></security:password-encoder>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+
+	<security:http use-expressions="true">
+		<security:intercept-url pattern="/first" access="isAuthenticated()" />
+		<security:intercept-url pattern="/" access="isAuthenticated() " />
+		<security:intercept-url pattern="/login" access="permitAll " />
+		<security:intercept-url pattern="/see" access="permitAll " />
+		<security:intercept-url pattern="/register" access="permitAll " />
+		<security:intercept-url pattern="/rest" access="permitAll " />
+		<security:intercept-url pattern="/sccessful" access="permitAll " />
+		<security:intercept-url pattern="/validate" access="permitAll " />
+		<security:intercept-url pattern="/**" access="denyAll" />
+		<security:form-login login-page="/login"
+			authentication-failure-url='/login?faild=true' />
+<!-- 		<security:remember-me use-secure-cookie="true" /> -->
+<!-- 		<security:logout logout-success-url="/index" /> -->
+	</security:http>
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+	</bean>
+</beans>
